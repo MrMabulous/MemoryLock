@@ -76,13 +76,20 @@ void UnlockMemory(void* addr, size_t len) {
 
 void PrefetchMemory(MemoryRange* ranges, size_t elements) {
 #if defined(UNIXMEM)
-  // TODO
+  // TODO WILLNEED
 #elif defined(WINPREFETCHMEMORY)
   HANDLE hndl = GetCurrentProcess();
   ULONG_PTR n = elements;
-  WIN32_MEMORY_RANGE_ENTRY* entries = (WIN32_MEMORY_RANGE_ENTRY*)ranges;
-  if (!PrefetchVirtualMemory(hndl, n, entries, 0))
+  WIN32_MEMORY_RANGE_ENTRY* entries = new WIN32_MEMORY_RANGE_ENTRY[elements];
+  for(int i=0; i<elements; ++i) {
+    entries[i].VirtualAddress = ranges[i].address;
+    entries[i].NumberOfBytes = ranges[i].length;
+  }
+  if (!PrefetchVirtualMemory(hndl, n, entries, 0)) {
+    delete[] entries;
     throw std::runtime_error(LastSystemErrorText());
+  }
+  delete[] entries;
 #endif
 }
 
