@@ -17,3 +17,21 @@ cc_library(
         ],
     }),
 )
+
+cc_test(
+    name = "memory_lock_test",
+    size = "small",
+    srcs = [
+        "memory_lock_test.cc",
+    ],
+    deps = [
+        ":memory_lock",
+        "@gtest//:main",
+    ],
+    copts = select({
+        "windows": [
+            "/DWINVER=0x602",
+            "/D_WIN32_WINNT=0x602",
+        ],
+    }),
+)
