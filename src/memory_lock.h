@@ -14,6 +14,8 @@ void UnlockMemory(void* addr, size_t length);
 
 void PrefetchMemory(MemoryRange* ranges, size_t elements);
 
+void SetWorkingSetSize(size_t min, size_t max);
+
 }  // namespace memorylock
 
 #endif  // MEMORY_LOCK_H

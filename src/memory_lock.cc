@@ -86,4 +86,14 @@ void PrefetchMemory(MemoryRange* ranges, size_t elements) {
 #endif
 }
 
+void SetWorkingSetSize(size_t min, size_t max) {
+#if defined(UNIXMEM)
+  // TODO
+#elif defined(WINMEM)
+  HANDLE hndl = GetCurrentProcess();
+  if (!SetProcessWorkingSetSize(hndl, min, max))
+    throw std::runtime_error(LastSystemErrorText());
+#endif
+}
+
 }  // namespace memorylock
